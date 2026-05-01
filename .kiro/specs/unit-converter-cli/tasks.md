@@ -6,21 +6,21 @@ Implement a zero-runtime-dependency Python 3.12 CLI tool for unit conversion, st
 
 ## Tasks
 
-- [ ] 1. Set up project structure and dev dependencies
+- [x] 1. Set up project structure and dev dependencies
   - Add `hypothesis` as a dev-only dependency in `pyproject.toml` under `[dependency-groups]` (e.g. `dev = ["hypothesis>=6"]`)
   - Create `tests/` directory with an empty `__init__.py`
   - Create `tests/test_converter.py` as the single test file
   - Verify `uv run pytest --version` works after adding `pytest` to dev deps
   - _Requirements: 5.1, 5.2_
 
-- [ ] 2. Implement core conversion functions and formatter
-  - [ ] 2.1 Implement `celsius_to_fahrenheit`, `fahrenheit_to_celsius`, and `format_result` in `main.py`
+- [x] 2. Implement core conversion functions and formatter
+  - [x] 2.1 Implement `celsius_to_fahrenheit`, `fahrenheit_to_celsius`, and `format_result` in `main.py`
     - `celsius_to_fahrenheit(value: float) -> float`: `(value * 9 / 5) + 32`
     - `fahrenheit_to_celsius(value: float) -> float`: `(value - 32) * 5 / 9`
     - `format_result(value: float) -> str`: `f"{value:.2f}"`
     - _Requirements: 1.1, 2.1, 3.1, 3.2_
 
-  - [ ] 2.2 Write unit tests for conversion functions and formatter
+  - [x] 2.2 Write unit tests for conversion functions and formatter
     - `test_celsius_to_fahrenheit`: 0→32, 100→212, -40→-40
     - `test_fahrenheit_to_celsius`: 32→0, 212→100, -40→-40
     - `test_format_result_trailing_zeros`: `format_result(100.0)` → `"100.00"`, `format_result(37.8)` → `"37.80"`
@@ -44,8 +44,8 @@ Implement a zero-runtime-dependency Python 3.12 CLI tool for unit conversion, st
     - Use `@given(st.floats(allow_nan=False, allow_infinity=False))`
     - Assert `format_result(v)` matches the regex `-?\d+\.\d{2}`
 
-- [ ] 3. Implement converter registry and dispatch
-  - [ ] 3.1 Define `CONVERTERS` registry dict and implement `dispatch` in `main.py`
+- [x] 3. Implement converter registry and dispatch
+  - [x] 3.1 Define `CONVERTERS` registry dict and implement `dispatch` in `main.py`
     - `CONVERTERS: dict[tuple[str, str], Callable[[float], float]]` mapping `("temperature", "c2f")` and `("temperature", "f2c")`
     - `dispatch(conversion_type, direction, raw_value)` looks up registry, parses float, raises `ValueError` for unknown keys or non-numeric input
     - _Requirements: 1.1, 2.1, 4.1, 4.2_
@@ -68,11 +68,11 @@ Implement a zero-runtime-dependency Python 3.12 CLI tool for unit conversion, st
     - Use `@given(st.text(), st.text())` filtered to pairs not in `CONVERTERS`
     - Assert `dispatch(t, d, "1")` raises `ValueError`
 
-- [ ] 4. Checkpoint — ensure all tests pass
+- [x] 4. Checkpoint — ensure all tests pass
   - Run `uv run pytest tests/` and confirm all tests pass; ask the user if any questions arise.
 
-- [ ] 5. Implement argument parser and main entry point
-  - [ ] 5.1 Implement `parse_args` in `main.py`
+- [x] 5. Implement argument parser and main entry point
+  - [x] 5.1 Implement `parse_args` in `main.py`
     - `parse_args(args: list[str]) -> tuple[str, str, str]`
     - Raises `ValueError` with usage message when `len(args) != 3`
     - _Requirements: 4.3_
@@ -81,13 +81,13 @@ Implement a zero-runtime-dependency Python 3.12 CLI tool for unit conversion, st
     - `test_parse_args_insufficient`: `parse_args([])`, `parse_args(["temperature"])`, `parse_args(["temperature", "c2f"])` all raise `ValueError`
     - _Requirements: 4.3_
 
-  - [ ] 5.3 Implement `main` entry point in `main.py`
+  - [x] 5.3 Implement `main` entry point in `main.py`
     - Reads `sys.argv[1:]`, calls `parse_args`, calls `dispatch`, prints `format_result(result)` to stdout
     - Catches `ValueError` / `KeyError`, writes message to `sys.stderr`, calls `sys.exit(1)`
     - Wire `if __name__ == "__main__": main()` guard
     - _Requirements: 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 4.1, 4.2, 4.3, 5.2_
 
-- [ ] 6. Final checkpoint — end-to-end smoke tests and validation
+- [x] 6. Final checkpoint — end-to-end smoke tests and validation
   - Run `uv run main.py temperature c2f 0` and assert output is `32.00` with exit code 0
   - Run `uv run main.py temperature f2c 212` and assert output is `100.00` with exit code 0
   - Run `uv run main.py temperature c2f abc` and assert exit code is non-zero
